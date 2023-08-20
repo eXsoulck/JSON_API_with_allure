@@ -16,7 +16,7 @@ class LambdatestService:
         response = self._send_request("json-to-xml", input_key="input-str", input_str=input_str)
 
         allure.attach(input_str, "Input JSON", allure.attachment_type.JSON)
-        allure.attach(response, "Output XML", allure.attachment_type.XML)
+        allure.attach(response.text, "Output XML", allure.attachment_type.XML)
 
         return response.text
 
@@ -25,7 +25,7 @@ class LambdatestService:
         response = self._send_request("minify-xml", "input-str", input_str).json()["minify_data"]
 
         allure.attach(input_str, "Input XML", allure.attachment_type.XML)
-        allure.attach(response, "Minified XML", allure.attachment_type.XML)
+        allure.attach(response.content, "Minified XML", allure.attachment_type.XML)
 
         return response
 
@@ -43,7 +43,7 @@ class LambdatestService:
         response = self._send_request("yaml-validator", input_key="yaml-str", input_str=input_yaml)
 
         allure.attach(input_yaml, "Input yaml", allure.attachment_type.YAML)
-        allure.attach(response, "Output yaml", allure.attachment_type.YAML)
+        allure.attach(response.content, "Expected result ", allure.attachment_type.TEXT)
         return response
 
     @allure.step("Send a POST request to JSON to YAML converter")
@@ -51,7 +51,7 @@ class LambdatestService:
         response = self._send_request("json-to-yaml", input_key="json-str", input_str=input_json)
 
         allure.attach(input_json, "Input JSON", allure.attachment_type.JSON)
-        allure.attach(response, "Output YAML", allure.attachment_type.YAML)
+        allure.attach(response.content, "Output YAML", allure.attachment_type.YAML)
 
         return response
 
@@ -60,6 +60,6 @@ class LambdatestService:
         response = self._send_request("xml-to-yaml", input_key="xml-str", input_str=input_xml)
 
         allure.attach(input_xml, "Input xml", allure.attachment_type.XML)
-        allure.attach(response, "Output YAML", allure.attachment_type.YAML)
+        allure.attach(response.json()["data"], "Output YAML", allure.attachment_type.YAML)
         return response
 
