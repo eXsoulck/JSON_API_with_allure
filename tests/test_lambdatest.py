@@ -1,7 +1,8 @@
 import allure
 import pytest
+import yaml
 
-from utils.file_utils import read_data_file
+from utils.file_utils import read_data_file, read_yaml_file
 
 
 @allure.suite("Conventers tests")
@@ -58,7 +59,7 @@ def test_yaml_validator(lambdatest_service, file_name):
         request = lambdatest_service.yaml_validator(input_yaml)
 
     with allure.step("Checking if yaml is valid"):
-        assert request.json()["message"] == "Valid YAML"
+        assert request == "Valid YAML"
 
 
 @allure.suite("Conventers tests")
@@ -72,10 +73,10 @@ def test_json_to_yaml(lambdatest_service, file_name):
         str_output = str(output_yaml)
 
     with allure.step("Send post request to json to yaml"):
-        request = lambdatest_service.json_to_yaml(input_json).json()["data"]
+        response = lambdatest_service.json_to_yaml(input_json)
 
     with allure.step("Compare generated yaml file"):
-        assert str(request) == str_output
+        assert str(response) == str_output
 
 
 @allure.suite("Conventers tests")
@@ -85,16 +86,14 @@ def test_json_to_yaml(lambdatest_service, file_name):
 def test_xml_yaml(lambdatest_service, file_name):
     with allure.step("Prepare test data"):
         input_xml = read_data_file(f"xml/{file_name}.xml")
-        output_yaml = read_data_file(f"yaml/{file_name}.yml")
-        expected_text = lambdatest_service.extract_text_from_json(output_yaml)
+        output_yaml = read_yaml_file(f"yaml/{file_name}.yml")
 
-    with allure.step("Send POST request to xml to yaml converter , extract text from "):
-        response = lambdatest_service.xml_to_yaml(input_xml).json()["data"]
+    with allure.step("Send POST request to xml to yaml converter and extract text from"):
+        response = lambdatest_service.xml_to_yaml(input_xml)
+        new_r = str(response).replace("'", "").replace('"', '').replace("\n", ", ").replace("{  }", "False")
 
     with allure.step("Compare results"):
-        actual_text = lambdatest_service.extract_text_from_json(response)
-
-        assert actual_text == expected_text
+        assert new_r == output_yaml
 
 # HOME TASK
 # Add tests for the following API endpoints (3 of them):

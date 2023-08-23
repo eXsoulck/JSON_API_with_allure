@@ -44,7 +44,7 @@ class LambdatestService:
 
         allure.attach(input_yaml, "Input yaml", allure.attachment_type.YAML)
         allure.attach(response.content, "Expected result ", allure.attachment_type.TEXT)
-        return response
+        return response.json()["message"]
 
     @allure.step("Send a POST request to JSON to YAML converter")
     def json_to_yaml(self, input_json):
@@ -53,7 +53,7 @@ class LambdatestService:
         allure.attach(input_json, "Input JSON", allure.attachment_type.JSON)
         allure.attach(response.content, "Output YAML", allure.attachment_type.YAML)
 
-        return response
+        return response.json()["data"]
 
     @allure.step("Send a POST to XML to YAML converter")
     def xml_to_yaml(self, input_xml):
@@ -61,5 +61,5 @@ class LambdatestService:
 
         allure.attach(input_xml, "Input xml", allure.attachment_type.XML)
         allure.attach(response.json()["data"], "Output YAML", allure.attachment_type.YAML)
-        return response
+        return response.json()["data"]
 
