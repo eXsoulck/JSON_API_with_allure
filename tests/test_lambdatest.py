@@ -56,10 +56,10 @@ def test_yaml_validator(lambdatest_service, file_name):
         input_yaml = read_data_file(f"yaml/{file_name}.yml")
 
     with allure.step("Send post request to yaml-validator"):
-        request = lambdatest_service.yaml_validator(input_yaml)
+        response = lambdatest_service.yaml_validator(input_yaml)
 
     with allure.step("Checking if yaml is valid"):
-        assert request == "Valid YAML"
+        assert response == "Valid YAML"
 
 
 @allure.suite("Conventers tests")
