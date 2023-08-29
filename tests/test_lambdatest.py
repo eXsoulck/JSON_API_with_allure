@@ -1,6 +1,5 @@
 import allure
 import pytest
-import yaml
 
 from utils.file_utils import read_data_file, read_yaml_file
 
